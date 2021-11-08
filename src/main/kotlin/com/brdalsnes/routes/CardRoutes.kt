@@ -1,29 +1,18 @@
 package com.brdalsnes.routes
 
 import com.brdalsnes.services.CardService
-import com.brdalsnes.services.DeckService
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.deckRoutes() {
-    val service = DeckService()
-    route("/deck") {
-        get {
-            val decks = service.getAll()
-            call.respond(decks)
-        }
-
+fun Route.cardRoutes() {
+    val service = CardService()
+    route("/card") {
         get("{id}") {
-            val deck = service.get(call.parameters["id"]!!)
-            call.respond(deck)
-        }
-
-        get("{id}/cards") {
-            val cards = CardService().getAllInDeck(call.parameters["id"]!!)
-            call.respond(cards)
+            val card = service.get(call.parameters["id"]!!)
+            call.respond(card)
         }
 
         post {
