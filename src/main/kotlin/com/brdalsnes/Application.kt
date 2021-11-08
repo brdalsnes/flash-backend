@@ -9,5 +9,6 @@ fun main() {
         DatabaseFactory.init()
         configureRouting()
         configureSerialization()
+        configureStatusPages()
     }.start(wait = true)
 }
