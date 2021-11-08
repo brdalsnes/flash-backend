@@ -15,5 +15,8 @@ fun Application.configureStatusPages() {
         exception<ExposedSQLException> {
             call.respond(HttpStatusCode.Conflict)
         }
+        exception<NotFoundException> { cause ->
+            call.respondText(cause.message ?: "Not found", status = HttpStatusCode.NotFound)
+        }
     }
 }
