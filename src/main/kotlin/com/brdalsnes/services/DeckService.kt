@@ -5,6 +5,7 @@ import com.brdalsnes.models.InsertDeck
 import com.brdalsnes.models.NewDeck
 import com.brdalsnes.models.UpdateDeck
 import com.brdalsnes.repositories.DeckRepository
+import com.brdalsnes.repositories.SubscriptionRepository
 import com.brdalsnes.repositories.UserRepository
 import io.ktor.features.*
 import java.util.*
@@ -41,5 +42,6 @@ class DeckService {
         val uuid = UUID.fromString(id)
         repository.get(uuid) ?: throw NotFoundException()
         repository.delete(uuid)
+        SubscriptionRepository().deleteAllForDeck(uuid)
     }
 }

@@ -20,6 +20,16 @@ fun Route.userRoutes() {
             call.respond(user)
         }
 
+        get("{id}/subscriptions") {
+            val subscriptions = service.getSubscriptions(call.parameters["id"]!!)
+            call.respond(subscriptions)
+        }
+
+        get("{id}/decks") {
+            val decks = service.getDecks(call.parameters["id"]!!)
+            call.respond(decks)
+        }
+
         post {
             service.add(call.receive())
             call.respond(HttpStatusCode.Created)
