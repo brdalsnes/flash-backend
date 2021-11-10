@@ -4,6 +4,7 @@ import com.brdalsnes.DatabaseFactory.dbQuery
 import com.brdalsnes.models.Deck
 import com.brdalsnes.models.InsertDeck
 import com.brdalsnes.models.UpdateDeck
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.*
 import java.util.*
 
@@ -16,11 +17,15 @@ object DeckTable : Table("deck") {
 
 class DeckRepository {
     suspend fun getAll() = dbQuery {
-        DeckTable.selectAll().map { toDeck(it) }
+        runBlocking {
+            DeckTable.selectAll().map { toDeck(it) }
+        }
     }
 
     suspend fun get(id: UUID) = dbQuery {
-        DeckTable.select { DeckTable.id eq id }.map { toDeck(it) }.singleOrNull()
+        runBlocking {
+            DeckTable.select { DeckTable.id eq id }.map { toDeck(it) }.singleOrNull()
+        }
     }
 
     suspend fun add(deck: InsertDeck) = dbQuery {
@@ -40,11 +45,15 @@ class DeckRepository {
         DeckTable.deleteWhere { DeckTable.id eq id }
     }
 
-    private fun toDeck(row: ResultRow): Deck {
+    private suspend fun toDeck(row: ResultRow): Deck {
+        val subscribers = SubscriptionRepository().getAllForDeck(row[DeckTable.id])
+        val cards = CardRepository().getAllInDeck(row[DeckTable.id])
         return Deck(
             id = row[DeckTable.id].toString(),
             creator = row[DeckTable.creator].toString(),
-            name = row[DeckTable.name]
+            name = row[DeckTable.name],
+            numSubscribers = subscribers.size,
+            numCards = cards.size
         )
     }
 }

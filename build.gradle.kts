@@ -27,6 +27,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-jdbc:0.35.1")
     implementation("org.postgresql:postgresql:42.2.24.jre7")
     implementation("com.zaxxer:HikariCP:5.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
