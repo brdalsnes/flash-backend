@@ -46,14 +46,12 @@ class DeckRepository {
     }
 
     private suspend fun toDeck(row: ResultRow): Deck {
-        val subscribers = SubscriptionRepository().getAllForDeck(row[DeckTable.id])
-        val cards = CardRepository().getAllInDeck(row[DeckTable.id])
         return Deck(
             id = row[DeckTable.id].toString(),
             creator = row[DeckTable.creator].toString(),
             name = row[DeckTable.name],
-            numSubscribers = subscribers.size,
-            numCards = cards.size
+            numSubscribers = SubscriptionRepository().getCountForDeck(row[DeckTable.id]),
+            numCards = CardRepository().getCountForDeck(row[DeckTable.id])
         )
     }
 }

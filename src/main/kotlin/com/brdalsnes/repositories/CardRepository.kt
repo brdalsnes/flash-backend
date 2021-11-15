@@ -16,12 +16,16 @@ object CardTable : Table("card") {
 }
 
 class CardRepository {
+    suspend fun get(id: UUID) = dbQuery {
+        CardTable.select { CardTable.id eq id }.map { toCard(it) }.singleOrNull()
+    }
+
     suspend fun getAllInDeck(deckId: UUID) = dbQuery {
         CardTable.select { CardTable.deckId eq deckId }.map { toCard(it) }
     }
 
-    suspend fun get(id: UUID) = dbQuery {
-        CardTable.select { CardTable.id eq id }.map { toCard(it) }.singleOrNull()
+    suspend fun getCountForDeck(deckId: UUID) = dbQuery {
+        CardTable.select { CardTable.deckId eq deckId }.count().toInt()
     }
 
     suspend fun add(card: InsertCard) = dbQuery {

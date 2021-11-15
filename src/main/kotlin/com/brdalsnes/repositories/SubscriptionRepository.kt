@@ -26,6 +26,10 @@ class SubscriptionRepository {
         SubscriptionTable.select { SubscriptionTable.deckId eq deckId }.map { toSubscription(it) }
     }
 
+    suspend fun getCountForDeck(deckId: UUID) = dbQuery {
+        SubscriptionTable.select { SubscriptionTable.deckId eq deckId }.count().toInt()
+    }
+
     suspend fun add(subscription: InsertSubscription) = dbQuery {
         SubscriptionTable.insert {
             it[userId] = subscription.userId
